@@ -30,12 +30,12 @@ class Game(Graphic,Module):
         elif color == Owner.OWN_BY_USER:
             message = "USER WIN"
         else:
-            message = "TEKKO"
-        self.update_gui_win_message(message)
+            message = "TIE"
+        self.__class__.mro()[1].update_gui_win_message(self,message)
 
     def user_played(self,place,color):
         # print("Inside Game user played", place)
-        super().update_user_step_in_module(place,color)
+        self.__class__.mro()[2].update_user_step_in_module(self,place,color)
 
     def send_update_to_GUI(self,list_sq, color):
         # print("GAME: color is ",color)
@@ -44,7 +44,7 @@ class Game(Graphic,Module):
         else:
             color = self.color_player1
         # print("update sq gui",color)
-        self.update_GUI(list_sq,color)
+        self.__class__.mro()[1].update_GUI(self, list_sq,color)
 
 
 
