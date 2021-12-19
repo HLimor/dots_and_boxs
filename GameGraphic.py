@@ -90,7 +90,7 @@ class Graphic:
     # Function print win message on the graphic interface.
     # sleep enable it to show as animation
     def update_gui_win_message(self,message):
-        for i in range(10):
+        for i in range(2):
             self.win_label.config(text=message,font=("Comic Sans MS", 20, "bold"), fg="pale green")
             self.win_label.update()
             time.sleep(1)
@@ -103,6 +103,8 @@ class Graphic:
     def update_board_size(self,*args):
         self.size = int(self.size_options.get())
         self.span_size = min(8, self.root.winfo_screenheight()//(10*self.size))
+        if self.frame_user_options:
+            self.win_label.config(text="")
         if self.frame_board:
             for widget in self.frame_board.winfo_children():
                 widget.destroy()
@@ -181,7 +183,7 @@ class Graphic:
                     else:
                         # Square.
                         self.button_gui_matrix[i].append(Button(master=self.frame_board,width=self.span_size,height=int(0.6*self.span_size),state=DISABLED))
-                # show the widget that was add before
+                #show the widget that was add before
                 self.button_gui_matrix[i][-1].grid(row=i,column=j)
 
 def main():
