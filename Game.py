@@ -4,19 +4,19 @@ from GameGraphic import Graphic
 from GameModule import Module
 from tools import Owner
 
-class Game(Graphic,Module):
+class Game:
 
     def __init__(self, root,color_player1='black',color_player2='white'):
         # self.graphic = Graphic(root)
-        Graphic.__init__(self, root)
-        Module.__init__(self,self.size)
+        self.graphics = Graphic(root,self)
+        self.module = Module(self,self.graphics.size)
         self.color_player1 = color_player1
         self.color_player2 = color_player2
 
     def update_game_size(self,size):
         self.size = size
         # To save the new color if it change from GUI
-        Module.__init__(self,size)
+        self.module = Module(size)
 
 
     def update_players_color(self,color1,color2):
@@ -31,11 +31,11 @@ class Game(Graphic,Module):
             message = "USER WIN"
         else:
             message = "TIE"
-        self.__class__.mro()[1].update_gui_win_message(self,message)
+        self.graphics.update_gui_win_message(message)
 
     def user_played(self,place,color):
         # print("Inside Game user played", place)
-        self.__class__.mro()[2].update_user_step_in_module(self,place,color)
+        self.module.update_user_step_in_module(place,color)
 
     def send_update_to_GUI(self,list_sq, color):
         # print("GAME: color is ",color)
@@ -44,7 +44,7 @@ class Game(Graphic,Module):
         else:
             color = self.color_player1
         # print("update sq gui",color)
-        self.__class__.mro()[1].update_GUI(self, list_sq,color)
+        self.graphics.update_GUI(list_sq,color)
 
 
 

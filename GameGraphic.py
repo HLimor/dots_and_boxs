@@ -6,8 +6,9 @@ from copy import deepcopy
 
 
 class Graphic:
-    def __init__(self,root):
+    def __init__(self,root,parent):
         self.root = root
+        self.parent = parent
         self.size = 0
         # human player color, can be changed from GUI
         self.color_player1 = "black"
@@ -65,7 +66,7 @@ class Graphic:
             self.color_player1 = colorchooser.askcolor(title="Choose color")[1]
         else:
             self.color_player2 = colorchooser.askcolor(title="Choose color")[1]
-        self.__class__.mro()[0].update_players_color(self,self.color_player1,self.color_player2)
+        self.parent.update_players_color(self.color_player1,self.color_player2)
 
     # Building the option to choose the colors for user & computer
     def build_color_option(self):
@@ -121,7 +122,7 @@ class Graphic:
         elif self.scroll_bar:
             self.scroll_bar.pack_forget()
 
-        self.__class__.mro()[0].update_game_size(self, self.size)
+        self.parent.update_game_size(self.size)
 
     def update_scrollregion(self, event):
         self.canvas_frame.configure(scrollregion=self.canvas_frame.bbox("all"))
@@ -137,7 +138,7 @@ class Graphic:
             return
         event.widget.config(bg=self.color_player1, state=DISABLED)
         place = (event.widget.grid_info()['row'],event.widget.grid_info()['column'])
-        self.__class__.mro()[0].user_played(self, place, self.color_player1)
+        self.parent.user_played(place, self.color_player1)
 
     # Function update graphic part after the computer calculate his steps
     def update_GUI(self,list_sq,color):

@@ -35,11 +35,12 @@ class Wall:
         self.place = place #(i,j)
 
 
-class Module():
+class Module:
 
-    def __init__(self,size):
+    def __init__(self,parent,size):
+        self.parent = parent
         self.size_sq = size
-        self.size = self.size*2+1
+        self.size = self.size_sq*2+1
         self.game_module = [[]]
         self.sq_occupied_by_user = 0
         self.build_game_module()
@@ -359,7 +360,7 @@ class Module():
         # print("befor",sq_walls_to_play)
         sq_walls_to_play_places = list(map(attrgetter('place'), sq_walls_to_play))
         # print("sq",sq_walls_to_play_places)
-        self.__class__.mro()[0].send_update_to_GUI(self, sq_walls_to_play_places,Owner.OWN_BY_COMP)
+        self.parent.send_update_to_GUI(sq_walls_to_play_places,Owner.OWN_BY_COMP)
 
     def check_if_someone_win(self):
         sq_occupied_by_computer = 0
@@ -373,11 +374,11 @@ class Module():
         # print("MODEL: ",sq_occupied_by_computer,sq_occupied_by_user)
         if sq_occupied_by_computer + sq_occupied_by_user == self.size_sq**2:
             if sq_occupied_by_computer > sq_occupied_by_user:
-                self.__class__.mro()[0].win_message_to_gui(self,Owner.OWN_BY_COMP)
+                self.parent.win_message_to_gui(Owner.OWN_BY_COMP)
             elif sq_occupied_by_computer < sq_occupied_by_user:
-                self.__class__.mro()[0].win_message_to_gui(self,Owner.OWN_BY_USER)
+                self.parent.win_message_to_gui(Owner.OWN_BY_USER)
             else:
-                self.__class__.mro()[0].win_message_to_gui(self,Owner.EMPTY)
+                self.parent.win_message_to_gui(Owner.EMPTY)
 
     def update_user_step_in_module(self,place,color):
         if self.game_module[place[0]][place[1]].owned != 0:
@@ -398,7 +399,7 @@ class Module():
                 self.game_module[place[0]][place[1]].owner = Owner.OWN_BY_USER
                 self.sq_occupied_by_user += 1
             # update the Graphic part
-            self.__class__.mro()[0].send_update_to_GUI(self,sq_to_closed_on_gui_places,Owner.OWN_BY_USER)
+            self.parent.send_update_to_GUI(sq_to_closed_on_gui_places,Owner.OWN_BY_USER)
             self.check_if_someone_win()
             # Gives the user another turn since he succeed to close a sq
             return
